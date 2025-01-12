@@ -1,4 +1,6 @@
 return {
+  { 'wakatime/vim-wakatime', lazy = false },
+  
   -- Autotags
   {
     "windwp/nvim-ts-autotag",
