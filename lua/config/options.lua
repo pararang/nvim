@@ -63,3 +63,4 @@ vim.filetype.add({
     ["%.env%.[%w_.-]+"] = "dotenv",
   },
 })
+vim.g.lazyvim_php_lsp = "intelephense"
