@@ -64,3 +64,4 @@ vim.filetype.add({
   },
 })
 vim.g.lazyvim_php_lsp = "intelephense"
+vim.g.codeium_disable_bindings = 1
