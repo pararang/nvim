@@ -35,4 +35,14 @@ return {
     },
     ft = { "blade", "php" },
   },
+  {
+    -- Ensure intelephense is installed via Mason
+    "williamboman/mason-lspconfig.nvim",
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      if not vim.tbl_contains(opts.ensure_installed, "intelephense") then
+        table.insert(opts.ensure_installed, "intelephense")
+      end
+    end,
+  },
 }

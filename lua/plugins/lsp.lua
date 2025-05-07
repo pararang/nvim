@@ -9,6 +9,7 @@ return {
     { "hrsh7th/cmp-nvim-lsp" },
   },
   config = function()
+    -- Setup mason first
     require("mason").setup({
       ui = {
         border = "rounded",
@@ -19,10 +20,59 @@ return {
         },
       },
     })
+
+    -- Setup mason-lspconfig with automatic_enable disabled
     require("mason-lspconfig").setup({
       ensure_installed = vim.tbl_keys(require("plugins.lsp.servers")),
+      automatic_enable = false, -- Disable automatic_enable to avoid the error
     })
+
+    -- Setup lspconfig UI
     require("lspconfig.ui.windows").default_options.border = "single"
+
+    -- Setup capabilities
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+
+    -- Setup servers manually instead of using setup_handlers
+    local servers = require("plugins.lsp.servers")
+    local lspconfig = require("lspconfig")
+
+    for server_name, server_settings in pairs(servers) do
+      local config = {
+        capabilities = capabilities,
+        settings = server_settings,
+      }
+
+      -- Add filetypes if specified
+      if server_settings and server_settings.filetypes then
+        config.filetypes = server_settings.filetypes
+      end
+
+      -- Special handling for intelephense (PHP)
+      if server_name == "intelephense" then
+        -- Add a custom on_attach for intelephense
+        config.on_attach = function(client, bufnr)
+          -- Disable Intelephense's formatter if using conform.nvim
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+
+          -- Debug message
+          print("LSP Intelephense attached to buffer: " .. bufnr)
+        end
+      end
+
+      lspconfig[server_name].setup(config)
+    end
+
+    -- Gleam LSP
+    -- For some reason mason doesn't work with gleam lsp
+    require("lspconfig").gleam.setup({
+      cmd = { "gleam", "lsp" },
+      filetypes = { "gleam" },
+      root_dir = require("lspconfig").util.root_pattern("gleam.toml", ".git"),
+      capabilities = capabilities,
+    })
 
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
@@ -56,18 +106,6 @@ return {
           { "<leader>li", require("telescope.builtin").lsp_implementations,  desc = "Implementation" },
           { "<leader>lw", require("telescope.builtin").diagnostics,          desc = "Diagnostics" },
           { "<leader>lc", require("config.utils").copyFilePathAndLineNumber, desc = "Copy File Path and Line Number" },
-
-          -- W = {
-          --   name = "+Workspace",
-          --   a = { vim.lsp.buf.add_workspace_folder, "Add Folder" },
-          --   r = { vim.lsp.buf.remove_workspace_folder, "Remove Folder" },
-          --   l = {
-          --     function()
-          --       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-          --     end,
-          --     "List Folders",
-          --   },
-          -- },
 
           { "<leader>Wa", vim.lsp.buf.add_workspace_folder,                  desc = "Workspace Add Folder" },
           { "<leader>Wr", vim.lsp.buf.remove_workspace_folder,               desc = "Workspace Remove Folder" },
@@ -105,33 +143,6 @@ return {
           })
         end
       end,
-    })
-
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-    -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-
-    local mason_lspconfig = require("mason-lspconfig")
-
-    mason_lspconfig.setup_handlers({
-      function(server_name)
-        require("lspconfig")[server_name].setup({
-          capabilities = capabilities,
-          -- on_attach = require("plugins.lsp.on_attach").on_attach,
-          settings = require("plugins.lsp.servers")[server_name],
-          filetypes = (require("plugins.lsp.servers")[server_name] or {}).filetypes,
-        })
-      end,
-    })
-
-    -- Gleam LSP
-    -- For some reason mason doesn't work with gleam lsp
-    require("lspconfig").gleam.setup({
-      cmd = { "gleam", "lsp" },
-      filetypes = { "gleam" },
-      root_dir = require("lspconfig").util.root_pattern("gleam.toml", ".git"),
-      capabilities = capabilities,
     })
 
     vim.diagnostic.config({

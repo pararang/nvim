@@ -50,4 +50,24 @@ return {
   clangd = {},
   marksman = {},
   -- "markdownlint-cli2", "markdown-toc"
+  
+  -- PHP configuration moved from php.lua
+  intelephense = {
+    settings = {
+      intelephense = {
+        completion = {
+          triggerParameterHints = true,
+          insertUseTab = true,
+        },
+        format = {
+          enable = false, -- Disable intelephense formatting since you're using conform.nvim
+        },
+        -- You can uncomment and customize these if needed
+        -- environment = { phpVersion = "8.1" },
+        -- stubs = { "Core", "apache", "bcmath", "bz2", ... "wordpress" },
+      },
+    },
+    filetypes = { "php" },
+    -- The on_attach function in lsp.lua will handle disabling formatting capabilities
+  },
 }
