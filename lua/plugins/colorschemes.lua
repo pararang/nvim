@@ -443,7 +443,7 @@ return {
         transparent = true,
         italic_comments = false,
         hide_fillchars = false,
-        borderless_telescope = true,
+        borderless_pickers = true,
         terminal_colors = true,
         cache = true,
 
