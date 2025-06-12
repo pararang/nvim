@@ -67,7 +67,7 @@ vim.keymap.set("n", "g#", "g#zz", opts)
 -- map("n", ";", "<cmd>Telescope resume<cr>", opts)
 
 -- search current buffer
-vim.keymap.set("n", "<C-s>", ":Telescope current_buffer_fuzzy_find<CR>", opts)
+-- vim.keymap.set("n", "<C-s>", ":Telescope current_buffer_fuzzy_find<CR>", opts)
 
 -- Split line with X
 vim.keymap.set("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<cr>", { silent = true })
@@ -90,5 +90,3 @@ vim.keymap.set("n", "<C-n>", ":w %:h/", opts)
 vim.keymap.set("n", "<C-P>", ':lua require("config.utils").toggle_go_test()<CR>', opts)
 
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", opts)
-vim.api.nvim_set_keymap("n", "<C-t>t", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("t", "<C-t>t", "<C-\\><C-n>:ToggleTerm direction=float<CR>", { noremap = true, silent = true })

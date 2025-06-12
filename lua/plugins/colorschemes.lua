@@ -71,7 +71,7 @@ return {
         show_end_of_buffer = false,
         integration_default = false,
         no_bold = true,
-        no_italic = false,
+        no_italic = true,
         no_underline = true,
         integrations = {
           barbecue = { dim_dirname = true, bold_basename = true, dim_context = false, alt_background = false },
@@ -361,12 +361,6 @@ return {
     end,
   },
   {
-    "michaeldyrynda/carbon",
-    config = function()
-      -- vim.cmd("colorscheme carbon")
-    end,
-  },
-  {
     "sainnhe/gruvbox-material",
     enabled = true,
     priority = 1000,
@@ -380,112 +374,85 @@ return {
       vim.g.gruvbox_material_cursor = "auto"
 
       -- vim.g.gruvbox_material_colors_override = { bg0 = '#16181A' } -- #0e1010
-      -- vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_better_performance = 1
 
       vim.cmd.colorscheme("gruvbox-material")
     end,
   },
 
-  { "bluz71/vim-moonfly-colors", name = "moonfly", lazy = false, priority = 1000 },
-  { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
-
   {
-    "slugbyte/lackluster.nvim",
-    lazy = false,
-    priority = 1000,
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+    priority = 1020, -- make sure to load this before all the other start plugins
     config = function()
-      -- local lackluster = require("lackluster")
-      -- require("nvim-web-devicons").setup({
-      --   color_icons = false,
-      --   override = {
-      --     ["default_icon"] = {
-      --       color = lackluster.color.gray4,
-      --       name = "Default",
-      --     },
-      --   },
-      -- })
-
-      -- vim.cmd.colorscheme("lackluster-night")
-    end,
-    init = function()
-      -- vim.cmd.colorscheme("lackluster")
-      -- vim.cmd.colorscheme("lackluster-hack") -- my favorite
-      -- vim.cmd.colorscheme("lackluster-mint")
-    end,
-  },
-  {
-    "datsfilipe/vesper.nvim",
-    config = function()
-      require("vesper").setup({
-        transparent = true, -- Boolean: Sets the background to transparent
-        italics = {
-          comments = false, -- Boolean: Italicizes comments
-          keywords = false, -- Boolean: Italicizes keywords
-          functions = false, -- Boolean: Italicizes functions
-          strings = false, -- Boolean: Italicizes strings
-          variables = false, -- Boolean: Italicizes variables
+      -- Default options
+      require('github-theme').setup({
+        options = {
+          -- Compiled file's destination location
+          compile_path = vim.fn.stdpath('cache') .. '/github-theme',
+          compile_file_suffix = '_compiled', -- Compiled file suffix
+          hide_end_of_buffer = true,         -- Hide the '~' character at the end of the buffer for a cleaner look
+          hide_nc_statusline = true,         -- Override the underline style for non-active statuslines
+          transparent = false,               -- Disable setting bg (make neovim's background transparent)
+          terminal_colors = true,            -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+          dim_inactive = false,              -- Non focused panes set to alternative background
+          module_default = true,             -- Default enable value for modules
+          styles = {                         -- Style to be applied to different syntax groups
+            comments = 'NONE',               -- Value is any valid attr-list value `:help attr-list`
+            functions = 'NONE',
+            keywords = 'NONE',
+            variables = 'NONE',
+            conditionals = 'NONE',
+            constants = 'NONE',
+            numbers = 'NONE',
+            operators = 'NONE',
+            strings = 'NONE',
+            types = 'NONE',
+          },
+          inverse = { -- Inverse highlight for different types
+            match_paren = false,
+            visual = false,
+            search = false,
+          },
+          darken = { -- Darken floating windows and sidebar-like windows
+            floats = true,
+            sidebars = {
+              enable = true,
+              list = {}, -- Apply dark background to specific windows
+            },
+          },
+          modules = { -- List of various plugins and additional options
+            -- ...
+          },
         },
-        overrides = {}, -- A dictionary of group names, can be a function returning a dictionary or a table.
-        palette_overrides = {},
+        palettes = {},
+        specs = {},
+        groups = {},
       })
-    end,
 
-    init = function()
-      -- vim.cmd.colorscheme("vesper")
+      -- setup must be called before loading
+      -- vim.cmd('colorscheme github_light')
     end,
   },
   {
-    "scottmckendry/cyberdream.nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    config = function()
-      require("cyberdream").setup({
-        transparent = true,
-        italic_comments = false,
-        hide_fillchars = false,
-        borderless_telescope = true,
-        terminal_colors = true,
-        cache = true,
-
-        -- vim.api.nvim_command("colorscheme cyberdream")
-      })
-    end,
-  },
-  {
-    "wtfox/jellybeans.nvim",
-    priority = 1000,
-    config = function()
-      require("jellybeans").setup()
-      -- vim.cmd.colorscheme("jellybeans")
-    end,
-  },
-
-  {
-    "bettervim/yugen.nvim",
-    config = function()
-      -- vim.cmd.colorscheme("yugen")
-    end,
-  },
-
-  {
-    "0xstepit/flow.nvim",
-    lazy = false,
-    priority = 1000,
-    tag = "v1.0.0",
     opts = {
-      theme = {
-        style = "dark", --  "dark" | "light"
-        contrast = "default", -- "default" | "high"
-        transparent = false, -- true | false
-      },
-      colors = {
-        mode = "dark", -- "default" | "dark" | "light"
-        fluo = "orange", -- "pink" | "cyan" | "yellow" | "orange" | "green"
-      },
-      ui = {
-        borders = "light", -- "theme" | "inverse" | "fluo" | "none"
-        aggressive_spell = false, -- true | false
+      transparent = true,
+      styles = {
+        comments = { italic = false },
+        keywords = { italic = false },
+        functions = {},
+        variables = {},
+        sidebars = "dark",
+        floats = "dark",
       },
     },
+    config = function(_, opts)
+      require("tokyonight").setup(opts)
+      -- vim.cmd.colorscheme("tokyonight-moon")
+    end,
   },
 }
