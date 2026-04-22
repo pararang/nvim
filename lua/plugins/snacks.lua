@@ -37,7 +37,7 @@ return {
       win = {
         position = "float",
         border = "rounded",
-        height = 0.8,
+        height = 0.2,
         width = 0.8,
       },
     },
