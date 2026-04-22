@@ -33,6 +33,14 @@ return {
     scroll = { enabled = false },
     statuscolumn = { enabled = true },
     words = { enabled = true },
+    terminal = {
+      win = {
+        position = "float",
+        border = "rounded",
+        height = 0.8,
+        width = 0.8,
+      },
+    },
     styles = { notification = {} },
     gh = {},
   },
