@@ -137,7 +137,7 @@ return {
         "markdownlint", "yamllint", "jsonlint", "htmlhint", "stylelint",
         "phpstan", "ruff", "mypy",
         -- Formatters
-        "stylua", "goimports", "prettier", "black", "isort", "shfmt", "pint",
+        "stylua", "goimports", "prettier", "black", "isort", "shfmt",
       },
     },
   },

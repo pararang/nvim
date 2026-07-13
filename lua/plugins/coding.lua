@@ -77,12 +77,17 @@ return {
     config = function()
       local parsers = {
         "bash", "c", "css", "go", "gomod", "gosum", "gowork",
-        "html", "javascript", "json", "latex", "lua", "luadoc", "luap",
+        "html", "javascript", "json", "lua", "luadoc", "luap",
         "markdown", "markdown_inline", "php", "proto", "python", "query",
-        "regex", "rust", "scss", "svelte", "swift", "terraform",
+        "regex", "rust", "scss", "svelte", "terraform",
         "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "zig",
       }
-      require("nvim-treesitter").install(parsers)
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = parsers,
+        auto_install = false,
+        highlight = { enable = false },
+        indent = { enable = false },
+      })
 
       -- Enable treesitter-based highlighting and indentation per-buffer
       vim.api.nvim_create_autocmd("FileType", {

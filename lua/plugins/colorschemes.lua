@@ -1,61 +1,15 @@
 -- Colorschemes: Theme configurations
 return {
-  {
-    "f-person/auto-dark-mode.nvim",
-    opts = {
-      update_interval = 1000,
-      set_dark_mode = function()
-        -- vim.cmd([[colorscheme flexoki-dark]])
-        require("yukinord").setup({ style = "dark" })
-        vim.cmd([[colorscheme gruvbox-material]])
-        -- vim.cmd([[colorscheme yukinord]])
-      end,
-      set_light_mode = function()
-        -- vim.cmd([[colorscheme flexoki-light]])
-        require("yukinord").setup({ style = "light" })
-        vim.cmd([[colorscheme github_light_default]])
-      end,
-    },
-  },
-
   -- ════════════════════════════════════════════════════════════════════════════
-  -- Yukinord (default)
-  -- ════════════════════════════════════════════════════════════════════════════
-  {
-    "adibhanna/yukinord.nvim",
-    -- dir = "~/Developer/opensource/yukinord/neovim",
-    config = function()
-      require("yukinord").setup({
-        transparent = true,
-        transparent_sidebar = true,
-      })
-      -- vim.cmd("colorscheme yukinord")
-    end,
-  },
-
-  -- ════════════════════════════════════════════════════════════════════════════
-  -- Gruvbox Material
-  -- ════════════════════════════════════════════════════════════════════════════
-  {
-    "sainnhe/gruvbox-material",
-    priority = 1000,
-    config = function()
-      -- vim.g.gruvbox_material_transparent_background = 1
-      vim.g.gruvbox_material_foreground = "mix"
-      vim.g.gruvbox_material_background = "hard"
-      vim.g.gruvbox_material_ui_contrast = "high"
-      vim.g.gruvbox_material_float_style = "bright"
-      vim.g.gruvbox_material_statusline_style = "mix"
-      vim.g.gruvbox_material_cursor = "auto"
-    end,
-  },
-
-  -- ════════════════════════════════════════════════════════════════════════════
-  -- Forest Night
+  -- Forest Night (default)
   -- ════════════════════════════════════════════════════════════════════════════
   {
     "adibhanna/forest-night.nvim",
+    lazy = false,
     priority = 1000,
+    config = function()
+      vim.cmd([[colorscheme forest-night]])
+    end,
   },
 
   -- ════════════════════════════════════════════════════════════════════════════

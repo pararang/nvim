@@ -41,9 +41,6 @@ return {
             -- Python
             python = { "isort", "black" },
 
-            -- PHP/Laravel
-            php = { "pint" },
-
             -- Shell
             sh = { "shfmt" },
             bash = { "shfmt" },
