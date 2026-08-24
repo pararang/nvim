@@ -82,9 +82,8 @@ return {
         "regex", "rust", "scss", "svelte", "swift", "terraform",
         "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "zig",
       }
-      require("nvim-treesitter").install(parsers)
+      pcall(require("nvim-treesitter").install, parsers)
 
-      -- Enable treesitter-based highlighting and indentation per-buffer
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)
           pcall(vim.treesitter.start)

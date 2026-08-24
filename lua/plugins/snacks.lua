@@ -47,8 +47,8 @@ return {
     { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
 
     -- Terminal
-    { "<C-/>", function() Snacks.terminal() end, desc = "Terminal" },
-    { "<C-_>", function() Snacks.terminal() end, desc = "which_key_ignore" },
+    { "<C-/>", "<cmd>ToggleFloatTerm<cr>", desc = "Terminal" },
+    { "<C-_>", "<cmd>ToggleFloatTerm<cr>", desc = "which_key_ignore" },
 
     -- Word navigation (LSP references)
     { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },

@@ -1,35 +1,19 @@
 -- Colorschemes: Theme configurations
 return {
-  {
-    "f-person/auto-dark-mode.nvim",
-    opts = {
-      update_interval = 1000,
-      set_dark_mode = function()
-        -- vim.cmd([[colorscheme flexoki-dark]])
-        require("yukinord").setup({ style = "dark" })
-        vim.cmd([[colorscheme gruvbox-material]])
-        -- vim.cmd([[colorscheme yukinord]])
-      end,
-      set_light_mode = function()
-        -- vim.cmd([[colorscheme flexoki-light]])
-        require("yukinord").setup({ style = "light" })
-        vim.cmd([[colorscheme github_light_default]])
-      end,
-    },
-  },
-
   -- ════════════════════════════════════════════════════════════════════════════
   -- Yukinord (default)
   -- ════════════════════════════════════════════════════════════════════════════
   {
     "adibhanna/yukinord.nvim",
+    lazy = false,
+    priority = 1000,
     -- dir = "~/Developer/opensource/yukinord/neovim",
     config = function()
       require("yukinord").setup({
         transparent = true,
         transparent_sidebar = true,
       })
-      -- vim.cmd("colorscheme yukinord")
+      vim.cmd("colorscheme yukinord")
     end,
   },
 
@@ -541,15 +525,17 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      require("cyberdream").setup({
-        transparent = true,
-        italic_comments = false,
-        hide_fillchars = false,
-        borderless_pickers = true,
-        terminal_colors = true,
-        cache = true,
-
-        -- vim.api.nvim_command("colorscheme cyberdream")
+      require("github-theme").setup({
+        options = {
+          transparent = true,
+          styles = {
+            comments = "NONE",
+            functions = "NONE",
+            keywords = "NONE",
+            statements = "NONE",
+            types = "NONE",
+          },
+        },
       })
     end,
   },
