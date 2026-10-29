@@ -98,7 +98,6 @@ vim.lsp.enable({
   "zls",
   "ts_ls",
   "rust_analyzer",
-  "intelephense",
   "bashls",
   "pyright",
   "cssls",
@@ -132,10 +131,14 @@ return {
     dependencies = { "mason-org/mason.nvim" },
     opts = {
       ensure_installed = {
+        -- LSP servers (Mason package names; configs live in lsp/)
+        "lua-language-server", "gopls", "zls", "typescript-language-server",
+        "rust-analyzer", "bash-language-server", "pyright", "css-lsp",
+        "html-lsp", "json-lsp", "yaml-language-server",
         -- Linters
-        "eslint_d", "luacheck", "golangci-lint", "shellcheck",
+        "eslint_d", "golangci-lint", "shellcheck",
         "markdownlint", "yamllint", "jsonlint", "htmlhint", "stylelint",
-        "phpstan", "ruff", "mypy",
+        "ruff", "mypy",
         -- Formatters
         "stylua", "goimports", "prettier", "black", "isort", "shfmt",
       },

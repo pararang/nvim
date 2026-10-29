@@ -31,6 +31,7 @@ require("lazy").setup({ import = "plugins" }, {
     missing = true,
     colorscheme = { "habamax" }
   },
+  rocks = { enabled = false }, -- no plugin needs luarocks
   checker = {
     enabled = true,
     notify = false,

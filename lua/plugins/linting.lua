@@ -14,21 +14,6 @@ return {
     local golangcilint = lint.linters.golangcilint
     golangcilint.ignore_exitcode = true
 
-    -- Configure luacheck
-    local luacheck = lint.linters.luacheck
-    luacheck.args = {
-      "--formatter",
-      "plain",
-      "--codes",
-      "--ranges",
-      "--filename",
-      function()
-        return vim.api.nvim_buf_get_name(0)
-      end,
-      "-",
-    }
-    luacheck.stdin = true
-
     -- Configure eslint_d
     if lint.linters.eslint_d then
       lint.linters.eslint_d.args = {
@@ -57,14 +42,11 @@ return {
       css = { "stylelint" },
       scss = { "stylelint" },
       less = { "stylelint" },
-      lua = { "luacheck" },
       python = { "ruff", "mypy" },
       sh = { "shellcheck" },
       bash = { "shellcheck" },
       zsh = { "shellcheck" },
       fish = { "fish" },
-      php = { "phpstan" },
-      blade = { "phpstan" },
       ruby = { "rubocop" },
       eruby = { "erb_lint" },
       rust = { "clippy" },

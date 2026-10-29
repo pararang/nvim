@@ -72,22 +72,19 @@ return {
   -- ════════════════════════════════════════════════════════════════════════════
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main", -- master is archived and breaks on Neovim 0.12
     build = ":TSUpdate",
     lazy = false,
     config = function()
       local parsers = {
         "bash", "c", "css", "go", "gomod", "gosum", "gowork",
         "html", "javascript", "json", "lua", "luadoc", "luap",
-        "markdown", "markdown_inline", "php", "proto", "python", "query",
+        "markdown", "markdown_inline", "latex", "typst", "proto", "python", "query",
         "regex", "rust", "scss", "svelte", "terraform",
         "tsx", "typescript", "vim", "vimdoc", "vue", "yaml", "zig",
       }
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = parsers,
-        auto_install = false,
-        highlight = { enable = false },
-        indent = { enable = false },
-      })
+      require("nvim-treesitter").setup({})
+      require("nvim-treesitter").install(parsers) -- no-op for already installed
 
       -- Enable treesitter-based highlighting and indentation per-buffer
       vim.api.nvim_create_autocmd("FileType", {

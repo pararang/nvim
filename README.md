@@ -6,17 +6,22 @@ A minimal, fast Neovim configuration for Neovim 0.12+ with lazy-loading, LSP sup
 
 ## Installation
 
-### 1. System Dependencies (Required)
+### 1. Dependencies (Required)
+
+Tools are managed with [mise](https://mise.jdx.dev). Install mise first (`brew install mise`, then add `eval "$(mise activate zsh)"` to your shell profile), then:
 
 ```bash
-# Core requirements
-brew install neovim    # v0.12+ required
-brew install git
-brew install ripgrep   # Fast grep (used by picker)
-brew install fd        # Fast find (used by picker)
-brew install lazygit   # Git TUI
-brew install node      # Required for some LSPs and tools
-brew install npm       # Required for markdown-preview
+# Core requirements (installed globally into ~/.config/mise/config.toml)
+mise use -g neovim@0.12      # v0.12+ required
+mise use -g ripgrep fd       # Fast grep / find (used by picker)
+mise use -g lazygit          # Git TUI
+mise use -g node@lts         # LSPs, Mason packages, markdown-preview (ships npm)
+mise use -g python@3.13      # Mason Python tools (ruff, mypy, black, ...)
+mise use -g tree-sitter      # tree-sitter CLI: nvim-treesitter (main) compiles parsers with it
+
+# Not available in mise
+xcode-select --install       # git, make, C compiler (parser builds, Mason, Swift)
+brew install curl unzip      # Mason (already present on stock macOS)
 ```
 
 ### 2. Fonts (Required)
@@ -35,44 +40,44 @@ Then set your terminal to use the installed font.
 
 ```bash
 # Go
-brew install go
+mise use -g go@1.26
 # After install, run :GoInstallBinaries in nvim
 
-# Rust
+# Rust (mise's rust plugin wraps rustup; use rustup directly)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # After install, run :CargoInstallTools in nvim
 
 # Zig
-brew install zig
+mise use -g zig
 
-# Python
-brew install python
+# Python (python@3.13 installed above)
 pip install pynvim  # Optional: for some plugins
-
-# PHP
-brew install php composer
 
 # Swift / iOS (macOS only)
 # Xcode + Command Line Tools provide sourcekit-lsp and xcodebuild
-
-# Lua (for luarocks, optional)
-brew install lua luarocks
 ```
 
 ### 4. Optional Dependencies
 
 ```bash
 # Markdown preview (browser-based)
-# markdown-preview.nvim will auto-install, but needs npm
+# markdown-preview.nvim builds itself with npm (provided by mise node)
 
 # Image rendering (optional)
 brew install imagemagick ghostscript
 
-# Mermaid diagrams (optional)
-npm install -g @mermaid-js/mermaid-cli
+# Mermaid diagrams (optional; mise's supply-chain check currently rejects a
+# transitive dep, so install with npm instead of `mise use`)
+npm install -g --allow-scripts=puppeteer @mermaid-js/mermaid-cli
 
 # LaTeX rendering (optional)
 brew install tectonic
+```
+
+Verify everything resolves through mise:
+
+```bash
+mise ls && mise doctor
 ```
 
 ### 5. Clone and Start
@@ -124,7 +129,7 @@ Run these commands in Neovim after first launch:
 ```
 
 All checks should pass. Common fixes:
-- Missing CLI tools: `brew install <tool>`
+- Missing CLI tools: `mise use -g <tool>` (or `brew install <tool>` if mise lacks it)
 - Treesitter errors: `:TSUpdate`
 - LSP not working: `:LspInfo` and `:Mason`
 
@@ -136,15 +141,17 @@ All checks should pass. Common fixes:
 
 | Category | Tools |
 |----------|-------|
-| **LSP Servers** | lua_ls, gopls, zls, ts_ls, rust-analyzer, intelephense, bashls, pyright, cssls, html, jsonls, yamlls, sourcekit-lsp¹ |
-| **Linters** | eslint_d, luacheck, golangci-lint, shellcheck, markdownlint, yamllint, jsonlint, htmlhint, stylelint, phpstan, ruff, mypy |
-| **Formatters** | stylua, goimports, prettier, black, isort, shfmt, pint |
+| **LSP Servers** | lua_ls, gopls, zls, ts_ls, rust-analyzer, bashls, pyright, cssls, html, jsonls, yamlls, sourcekit-lsp¹ |
+| **Linters** | eslint_d, golangci-lint, shellcheck, markdownlint, yamllint, jsonlint, htmlhint, stylelint, ruff, mypy |
+| **Formatters** | stylua, goimports, prettier, black, isort, shfmt |
 
 ¹ sourcekit-lsp ships with Xcode (not managed by Mason).
 
 ### Via Treesitter
 
-Parsers for: bash, c, css, go, html, javascript, json, latex, lua, markdown, php, python, rust, scss, svelte, swift, terraform, tsx, typescript, vim, vue, yaml, zig
+Uses the `main` branch of nvim-treesitter (the `master` branch is archived and breaks on Neovim 0.12). Parsers are compiled locally, so the `tree-sitter` CLI and a C compiler are required.
+
+Parsers for: bash, c, css, go, gomod, gosum, gowork, html, javascript, json, lua, luadoc, luap, markdown, markdown_inline, latex, typst, proto, python, query, regex, rust, scss, svelte, terraform, tsx, typescript, vim, vimdoc, vue, yaml, zig
 
 ---
 
@@ -178,7 +185,6 @@ Parsers for: bash, c, css, go, html, javascript, json, latex, lua, markdown, php
 │   ├── cssls.lua
 │   ├── gopls.lua
 │   ├── html.lua
-│   ├── intelephense.lua
 │   ├── jsonls.lua
 │   ├── lua_ls.lua
 │   ├── pyright.lua
@@ -505,7 +511,6 @@ Auto-installed via Mason:
 - **Lua:** lua_ls
 - **TypeScript:** ts_ls
 - **Python:** pyright
-- **PHP:** intelephense
 - **Bash:** bashls
 - **CSS/HTML/JSON/YAML:** vscode servers
 
@@ -522,7 +527,6 @@ Not managed by Mason:
 | Lua | stylua |
 | JS/TS/JSON/YAML/HTML/CSS | prettier |
 | Python | isort, black |
-| PHP | pint |
 | Shell | shfmt |
 
 Format on save is **enabled by default**.
@@ -533,9 +537,7 @@ Format on save is **enabled by default**.
 |----------|--------|
 | Go | golangci-lint |
 | JS/TS | eslint_d |
-| Lua | luacheck |
 | Python | ruff, mypy |
-| PHP | phpstan |
 | Shell | shellcheck |
 
 ---
@@ -547,7 +549,7 @@ Format on save is **enabled by default**.
 ```
 
 Common fixes:
-- Missing tools: `brew install <tool>`
+- Missing tools: `mise use -g <tool>` (or `brew install <tool>` if mise lacks it)
 - Treesitter errors: `:TSUpdate`
 - Go tools: `:GoInstallBinaries`
 - Rust tools: `:CargoInstallTools`
